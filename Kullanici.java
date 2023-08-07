@@ -1,4 +1,4 @@
-package com.example.carbonapp;
+package com.uygulamam.carbon;
 
 public class Kullanici {
     private String isim;

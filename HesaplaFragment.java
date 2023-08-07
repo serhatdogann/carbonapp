@@ -1,18 +1,23 @@
-package com.example.carbonapp;
+package com.uygulamam.carbon;
 
 import android.os.Bundle;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+
+import com.google.android.material.navigation.NavigationView;
+import com.uygulamam.carbonapp.R;
 
 import java.text.DecimalFormat;
 
@@ -42,24 +47,53 @@ public class HesaplaFragment extends Fragment {
     private Spinner ucusSayisi;
     private Spinner elektrikolcum;
     private Spinner isinmaSpinner;
+    private LinearLayout linearLayout1;
+    private LinearLayout linearLayout2;
 
-    private EditText karaulasımı;
-    private EditText havaulasımı;
-    private EditText elektrik;
-    private EditText isinma;
+    private LinearLayout linearLayout3;
+    private LinearLayout linearLayout4;
+    private LinearLayout linearLayout5;
 
-    private EditText toplam;
-    private  double top;
+
+    private TextView karaulasımı;
+    private TextView havaulasımı;
+    private TextView elektrik;
+    private TextView isinma;
+
+    private TextView toplam;
+    private double top;
+
+    private Button bagisYap;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_hesapla, container, false);
 
+        // Hide Nav_menu.xml
+        NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
+        navigationView.setVisibility(View.GONE);
+
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+
+        LinearLayout linearLayout1 = rootView.findViewById(R.id.linear1);
+        LinearLayout linearLayout2 = rootView.findViewById(R.id.linear2);
+        LinearLayout linearLayout3 = rootView.findViewById(R.id.linear3);
+        LinearLayout linearLayout4 = rootView.findViewById(R.id.linear4);
+        LinearLayout linearLayout5 = rootView.findViewById(R.id.linear5);
+
         sıfırText = rootView.findViewById(R.id.sıfırText);
         sıfırText2 = rootView.findViewById(R.id.sıfırText2);
         sıfırText3 = rootView.findViewById(R.id.sıfırText3);
         sıfırText4 = rootView.findViewById(R.id.sıfırText4);
-        agac=rootView.findViewById(R.id.agac);
+        agac = rootView.findViewById(R.id.agac);
+
+        bagisYap = rootView.findViewById(R.id.bagisButton);
+
+        linearLayout1.setVisibility(View.INVISIBLE);
+        linearLayout2.setVisibility(View.INVISIBLE);
+        linearLayout3.setVisibility(View.INVISIBLE);
+        linearLayout4.setVisibility(View.INVISIBLE);
+        linearLayout5.setVisibility(View.INVISIBLE);
 
         leftimageView = rootView.findViewById(R.id.leftImageView);
         rightimageView = rootView.findViewById(R.id.rightImageView);
@@ -78,8 +112,10 @@ public class HesaplaFragment extends Fragment {
         isinmaSpinner = rootView.findViewById(R.id.spinner4);
         isinma = rootView.findViewById(R.id.isinma);
         elektrik = rootView.findViewById(R.id.elektrik);
+        bagisYap = rootView.findViewById(R.id.bagisButton);
+        bagisYap.setVisibility(View.GONE);
 
-        toplam=rootView.findViewById(R.id.toplam);
+        toplam = rootView.findViewById(R.id.toplam);
 
         sıfırText.setText(String.valueOf(counter));
 
@@ -173,7 +209,11 @@ public class HesaplaFragment extends Fragment {
                 String selectedFuelType2 = ucusSayisi.getSelectedItem().toString();
                 String selectedFuelType4 = isinmaSpinner.getSelectedItem().toString();
 
-
+                linearLayout1.setVisibility(View.VISIBLE);
+                linearLayout2.setVisibility(View.VISIBLE);
+                linearLayout3.setVisibility(View.VISIBLE);
+                linearLayout4.setVisibility(View.VISIBLE);
+                linearLayout5.setVisibility(View.VISIBLE);
 
                 double coefficient;
                 if (selectedFuelType.equals("Benzin")) {
@@ -188,13 +228,13 @@ public class HesaplaFragment extends Fragment {
 
                 double result2 = sifirtValue2 * 51.46;
 
-                double result = sifirtValue * coefficient/10;
-                karaulasımı.setText(String.format("%.2f ", result)+" Kg");
-                havaulasımı.setText(String.format("%.2f ", result2)+" Kg");
+                double result = sifirtValue * coefficient / 10;
+                karaulasımı.setText(String.format("%.2f ", result) + " Kg");
+                havaulasımı.setText(String.format("%.2f ", result2) + " Kg");
 
-                double result3 = sifirtValue3 * 47.8/100;
+                double result3 = sifirtValue3 * 47.8 / 100;
                 DecimalFormat decimalFormat = new DecimalFormat("#");
-                elektrik.setText(String.format("%.2f ",result3) + " Kg");
+                elektrik.setText(String.format("%.2f ", result3) + " Kg");
 
                 double coefficient2;
                 if (selectedFuelType4.equals("Doğalgaz")) {
@@ -206,187 +246,122 @@ public class HesaplaFragment extends Fragment {
                 } else {
                     coefficient2 = 0;
                 }
-                double result4 = (sifirtValue4 * coefficient2)/100;
+                double result4 = (sifirtValue4 * coefficient2) / 100;
                 isinma.setText(decimalFormat.format(result4) + " Kg ");
 
-                double result5 = result + result2 + result3 + result4/100;
-                toplam.setText(decimalFormat.format(result5));
+                double result5 = result + result2 + result3 + result4;
+                toplam.setText(decimalFormat.format(result5) + " Kg");
 
-                if (result5 > 0 && result5 < 500) {
-                    agac.setText("Doğaya 1 Ağaç Borcunuz Var");
-                }
-
-                else if(result5>500 && result5<1000 ){
-                    agac.setText("Doğaya 2 Ağaç Borcunuz Var");
-                }
-                else if(result5>1000 && result5<1500 ){
-                    agac.setText("Doğaya 3 Ağaç Borcunuz Var");
-                }
-                else if(result5>1500 && result5<2000 ){
-                    agac.setText("Doğaya 4 Ağaç Borcunuz Var");
-                }
-                else if(result5>2000 && result5<2500 ){
-                    agac.setText("Doğaya 5 Ağaç Borcunuz Var");
-                }
-                else if(result5>2500 && result5<3000 ){
-                    agac.setText("Doğaya 6 Ağaç Borcunuz Var");
-                }
-                else if(result5>3000 && result5<3500){
-                    agac.setText("Doğaya 7 Ağaç Borcunuz Var");
-                }
-                else if(result5>3500 && result5<4000 ){
-                    agac.setText("Doğaya 8 Ağaç Borcunuz Var");
-                }
-                else if(result5>4000 && result5<4500 ){
-                    agac.setText("Doğaya 9 Ağaç Borcunuz Var");
-                }
-                else if(result5>4500 && result5<5000 ){
-                    agac.setText("Doğaya 10 Ağaç Borcunuz Var");
-                }
-                else if(result5>5000 && result5<5500 ){
-                    agac.setText("Doğaya 11 Ağaç Borcunuz Var");
-                }
-                else if(result5>5500 && result5<6000 ){
-                    agac.setText("Doğaya 12 Ağaç Borcunuz Var");
-                }
-                else if(result5>6000 && result5<6500 ){
-                    agac.setText("Doğaya 13 Ağaç Borcunuz Var");
-                }
-                else if(result5>6500 && result5<7000 ){
-                    agac.setText("Doğaya 14 Ağaç Borcunuz Var");
-                }
-                else if(result5>7000 && result5<7500 ){
-                    agac.setText("Doğaya 15 Ağaç Borcunuz Var");
-                }
-                else if(result5>7500 && result5<8000 ){
-                    agac.setText("Doğaya 16 Ağaç Borcunuz Var");
-                }
-                else if(result5>8000 && result5<8500 ){
-                    agac.setText("Doğaya 17 Ağaç Borcunuz Var");
-                }
-                else if(result5>8500 && result5<9000 ){
-                    agac.setText("Doğaya 18 Ağaç Borcunuz Var");
-                }
-                else if(result5>9000 && result5<9500 ){
-                    agac.setText("Doğaya 19 Ağaç Borcunuz Var");
-                }
-                else if(result5>9500 && result5<10000 ){
-                    agac.setText("Doğaya 20 Ağaç Borcunuz Var");
-                }
-                else if(result5>10000 && result5<10500 ){
-                    agac.setText("Doğaya 21 Ağaç Borcunuz Var");
-                }
-                else if(result5>10500 && result5<11000 ){
-                    agac.setText("Doğaya 22 Ağaç Borcunuz Var");
-                }
-                else if(result5>11000 && result5<11500 ){
-                    agac.setText("Doğaya 23 Ağaç Borcunuz Var");
-                }
-                else if(result5>11500 && result5<12000 ){
-                    agac.setText("Doğaya 24 Ağaç Borcunuz Var");
-                }
-                else if(result5>12000 && result5<12500 ){
-                    agac.setText("Doğaya 25 Ağaç Borcunuz Var");
-                }
-                else if(result5>12500 && result5<13000 ){
-                    agac.setText("Doğaya 26 Ağaç Borcunuz Var");
-                }
-
-                else if(result5>13000 && result5<13500 ){
-                    agac.setText("Doğaya 27 Ağaç Borcunuz Var");
-                }
-
-                else if(result5>13500 && result5<14000 ){
-                    agac.setText("Doğaya 2 Ağaç Borcunuz Var");
-                }
-                else if(result5>14000 && result5<14500){
-                    agac.setText("Doğaya 28 Ağaç Borcunuz Var");
-                }
-
-                else if(result5>14500 && result5<15000 ){
-                    agac.setText("Doğaya 29 Ağaç Borcunuz Var");
-                }
-                else if(result5>15000 && result5<15500 ){
-                    agac.setText("Doğaya 30 Ağaç Borcunuz Var");
-                }
-
-                else if(result5>15500 && result5<16000 ){
-                    agac.setText("Doğaya 31 Ağaç Borcunuz Var");
-                }
-                else if(result5>16000 && result5<16500 ){
-                    agac.setText("Doğaya 32 Ağaç Borcunuz Var");
-                }
-
-                else if(result5>16500 && result5<17000){
-                    agac.setText("Doğaya 33 Ağaç Borcunuz Var");
+                int treeCount;
+                if (result5 < 0) {
+                    treeCount = 0;
+                } else if (result5 < 500) {
+                    treeCount = 1;
+                } else if (result5 < 1000) {
+                    treeCount = 2;
+                } else if (result5 < 1500) {
+                    treeCount = 3;
+                } else if (result5 < 2000) {
+                    treeCount = 4;
+                } else if (result5 < 2500) {
+                    treeCount = 5;
+                } else if (result5 < 3000) {
+                    treeCount = 6;
+                } else if (result5 < 3500) {
+                    treeCount = 7;
+                } else if (result5 < 4000) {
+                    treeCount = 8;
+                } else if (result5 < 4500) {
+                    treeCount = 9;
+                } else if (result5 < 5000) {
+                    treeCount = 10;
+                } else if (result5 < 5500) {
+                    treeCount = 11;
+                } else if (result5 < 6000) {
+                    treeCount = 12;
+                } else if (result5 < 6500) {
+                    treeCount = 13;
+                } else if (result5 < 7000) {
+                    treeCount = 14;
+                } else if (result5 < 7500) {
+                    treeCount = 15;
+                } else if (result5 < 8000) {
+                    treeCount = 16;
+                } else if (result5 < 8500) {
+                    treeCount = 17;
+                } else if (result5 < 9000) {
+                    treeCount = 18;
+                } else if (result5 < 9500) {
+                    treeCount = 19;
+                } else if (result5 < 10000) {
+                    treeCount = 20;
+                } else if (result5 < 10500) {
+                    treeCount = 21;
+                } else if (result5 < 11000) {
+                    treeCount = 22;
+                } else if (result5 < 11500) {
+                    treeCount = 23;
+                } else if (result5 < 12000) {
+                    treeCount = 24;
+                } else if (result5 < 12500) {
+                    treeCount = 25;
+                } else if (result5 < 13000) {
+                    treeCount = 26;
+                } else if (result5 < 13500) {
+                    treeCount = 27;
+                } else if (result5 < 14000) {
+                    treeCount = 28;
+                } else if (result5 < 14500) {
+                    treeCount = 29;
+                } else if (result5 < 15000) {
+                    treeCount = 30;
+                } else if (result5 < 15500) {
+                    treeCount = 31;
+                } else if (result5 < 16000) {
+                    treeCount = 32;
+                } else if (result5 < 16500) {
+                    treeCount = 33;
+                } else if (result5 < 17000) {
+                    treeCount = 34;
+                } else if (result5 < 17500) {
+                    treeCount = 35;
+                } else if (result5 < 18000) {
+                    treeCount = 36;
+                } else if (result5 < 18500) {
+                    treeCount = 37;
+                } else if (result5 < 19000) {
+                    treeCount = 38;
+                } else if (result5 < 19500) {
+                    treeCount = 39;
+                } else if (result5 < 20000) {
+                    treeCount = 40;
+                } else if (result5 < 20500) {
+                    treeCount = 41;
+                } else if (result5 < 21000) {
+                    treeCount = 42;
+                } else if (result5 < 21500) {
+                    treeCount = 43;
+                } else if (result5 < 22000) {
+                    treeCount = 44;
+                } else if (result5 < 22500) {
+                    treeCount = 45;
+                } else if (result5 < 23000) {
+                    treeCount = 46;
+                } else if (result5 < 23500) {
+                    treeCount = 47;
+                } else if (result5 < 24000) {
+                    treeCount = 48;
+                } else if (result5 < 24500) {
+                    treeCount = 49;
+                } else {
+                    treeCount = 50;
                 }
 
-                else if(result5>17000 && result5<17500 ){
-                    agac.setText("Doğaya 34 Ağaç Borcunuz Var");
-                }
-                else if(result5>17500 && result5<18000 ){
-                    agac.setText("Doğaya 35 Ağaç Borcunuz Var");
-                }
-                else if(result5>18000 && result5<18500){
-                    agac.setText("Doğaya 36 Ağaç Borcunuz Var");
-                }
-                else if(result5>18500 && result5<19000 ){
-                    agac.setText("Doğaya 37 Ağaç Borcunuz Var");
-                }
-                else if(result5>19000 && result5<19500){
-                    agac.setText("Doğaya 2 Ağaç Borcunuz Var");
-                }
-                else if(result5>19500 && result5<20000){
-                    agac.setText("Doğaya 38 Ağaç Borcunuz Var");
-                }
-                else if(result5>20000 && result5<20500 ){
-                    agac.setText("Doğaya 39 Ağaç Borcunuz Var");
-                }
-                else if(result5>20500 && result5<21000 ){
-                    agac.setText("Doğaya 40 Ağaç Borcunuz Var");
-                }
-                else if(result5>21000 && result5<21500 ){
-                    agac.setText("Doğaya 41 Ağaç Borcunuz Var");
-                }
-
-                else if(result5>21500 && result5<22000 ){
-                    agac.setText("Doğaya 42 Ağaç Borcunuz Var");
-                }
-                else if(result5>22000 && result5<22500 ){
-                    agac.setText("Doğaya 43 Ağaç Borcunuz Var");
-                }
-
-                else if(result5>22500 && result5<23000 ){
-                    agac.setText("Doğaya 44 Ağaç Borcunuz Var");
-                }
-                else if(result5>23000 && result5<23500 ){
-                    agac.setText("Doğaya 2 Ağaç Borcunuz Var");
-                }
-                else if(result5>23500 && result5<24000 ){
-                    agac.setText("Doğaya 45 Ağaç Borcunuz Var");
-                }
-
-                else if(result5>24000 && result5<24500 ){
-                    agac.setText("Doğaya 46 Ağaç Borcunuz Var");
-                }
-
-                else if(result5>24500 && result5<25000 ){
-                    agac.setText("Doğaya 47 Ağaç Borcunuz Var");
-                }
-                else if(result5>25000 && result5<25500 ){
-                    agac.setText("Doğaya 48 Ağaç Borcunuz Var");
-                }
-                else if(result5>25500 && result5<26000 ){
-                    agac.setText("Doğaya 49 Ağaç Borcunuz Var");
-                }
-                else if(result5>26000 ){
-                    agac.setText("Doğaya 50 Ağaç Borcunuz Var");
-                }
-
+                agac.setText("Doğaya " + treeCount + " Ağaç Borcunuz Var");
             }
-
-
         });
+
+        bagisYap.setVisibility(View.GONE);
 
         return rootView;
     }

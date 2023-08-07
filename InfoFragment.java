@@ -1,4 +1,4 @@
-package com.example.carbonapp;
+package com.uygulamam.carbon;
 
 import android.os.Bundle;
 
@@ -7,6 +7,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.uygulamam.carbonapp.R;
+
 
 public class InfoFragment extends Fragment {
 

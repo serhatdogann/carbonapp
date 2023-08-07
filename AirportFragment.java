@@ -1,4 +1,4 @@
-package com.example.carbonapp;
+package com.uygulamam.carbon;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -16,6 +16,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+
+import com.uygulamam.carbonapp.R;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -181,7 +184,7 @@ public class AirportFragment extends Fragment {
                         sonuc = Integer.parseInt(distanceText.trim());
 
                         // Random bir sayı seçme ve 3.74 ile çarpma
-                        randomValue = 3.74;
+                        randomValue = 0.293;
                         lastCalculatedCO2 = sonuc * randomValue;
                         isCO2Calculated = true;
 
@@ -280,7 +283,7 @@ public class AirportFragment extends Fragment {
                             sonuc = Integer.parseInt(distanceText.trim());
 
                             // Rastgele bir sayı seçme, doğrudan 3.74 ile çarpma ve sonucu yazdırma
-                            lastCalculatedCO2 = sonuc * 3.74;
+                            lastCalculatedCO2 = sonuc * 0.293;
                             isCO2Calculated = true;
 
                             String formattedCO2 = String.format("%.3f", lastCalculatedCO2 / 1000);
